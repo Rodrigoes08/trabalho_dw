@@ -1,0 +1,183 @@
+
+CREATE TABLE dim_estadoCivil (
+                cod_estadoCivil INT NOT NULL,
+                nm_estadoCivil VARCHAR(100),
+                PRIMARY KEY (cod_estadoCivil)
+);
+
+
+CREATE TABLE dim_raca (
+                cod_raca INT NOT NULL,
+                nm_raca VARCHAR(100),
+                PRIMARY KEY (cod_raca)
+);
+
+
+CREATE TABLE dim_presencaEnade (
+                tp_pres INT NOT NULL,
+                nm_tipoPresenca VARCHAR(100),
+                PRIMARY KEY (tp_pres)
+);
+
+
+CREATE TABLE dim_sexo (
+                tp_sexo INT NOT NULL,
+                nome_sexo VARCHAR(100),
+                PRIMARY KEY (tp_sexo)
+);
+
+
+CREATE TABLE dim_turnoGraduacao (
+                co_turnoGraduacao INT NOT NULL,
+                nome_turno VARCHAR(100),
+                PRIMARY KEY (co_turnoGraduacao)
+);
+
+
+CREATE TABLE dim_regiao (
+                co_regiao INT NOT NULL,
+                nome_regiao VARCHAR(200),
+                PRIMARY KEY (co_regiao)
+);
+
+
+CREATE TABLE dim_uf (
+                co_uf INT NOT NULL,
+                co_regiao INT NOT NULL,
+                nome_categoria VARCHAR(100),
+                PRIMARY KEY (co_uf, co_regiao)
+);
+
+
+CREATE TABLE dim_municipio (
+                co_municipio INT NOT NULL,
+                co_uf INT NOT NULL,
+                co_regiao INT NOT NULL,
+                nome_municipio VARCHAR(200),
+                PRIMARY KEY (co_municipio, co_uf, co_regiao)
+);
+
+
+CREATE TABLE dim_coModalidade (
+                co_Modalidade INT NOT NULL,
+                nome_Modalidade VARCHAR(200),
+                PRIMARY KEY (co_Modalidade)
+);
+
+
+CREATE TABLE dim_coGroup (
+                co_group INT NOT NULL,
+                nome_group VARCHAR(200),
+                PRIMARY KEY (co_group)
+);
+
+
+CREATE TABLE dim_codOrg (
+                co_orgacad INT NOT NULL,
+                nome_orgacad VARCHAR(200),
+                PRIMARY KEY (co_orgacad)
+);
+
+
+CREATE TABLE dim_categoria (
+                co_categad INT NOT NULL,
+                nome_categoria VARCHAR(200),
+                PRIMARY KEY (co_categad)
+);
+
+
+CREATE TABLE fato (
+                co_municipio INT NOT NULL,
+                co_uf INT NOT NULL,
+                co_regiao INT NOT NULL,
+                nu_ano INT NOT NULL,
+                co_ies VARCHAR NOT NULL,
+                co_curso VARCHAR NOT NULL,
+                nu_idade INT NOT NULL,
+                ano_fim_em INT NOT NULL,
+                ano_in_grad INT NOT NULL,
+                tp_incricao VARCHAR(100) NOT NULL,
+                tp_sexo INT NOT NULL,
+                co_turnoGraduacao INT NOT NULL,
+                co_group INT NOT NULL,
+                co_Modalidade INT NOT NULL,
+                cod_estadoCivil INT NOT NULL,
+                cod_raca INT NOT NULL,
+                tp_pres INT NOT NULL,
+                co_orgacad INT NOT NULL,
+                co_categad INT NOT NULL,
+                PRIMARY KEY (co_municipio, co_uf, co_regiao)
+);
+
+
+ALTER TABLE fato ADD CONSTRAINT dim_estadocivil_fato_fk
+FOREIGN KEY (cod_estadoCivil)
+REFERENCES dim_estadoCivil (cod_estadoCivil)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_raca_fato_fk
+FOREIGN KEY (cod_raca)
+REFERENCES dim_raca (cod_raca)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_presencaenade_fato_fk
+FOREIGN KEY (tp_pres)
+REFERENCES dim_presencaEnade (tp_pres)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_sexo_fato_fk
+FOREIGN KEY (tp_sexo)
+REFERENCES dim_sexo (tp_sexo)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_turnograduacao_fato_fk
+FOREIGN KEY (co_turnoGraduacao)
+REFERENCES dim_turnoGraduacao (co_turnoGraduacao)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE dim_uf ADD CONSTRAINT dim_regiao_dim_uf_fk
+FOREIGN KEY (co_regiao)
+REFERENCES dim_regiao (co_regiao)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE dim_municipio ADD CONSTRAINT dim_uf_dim_municipio_fk
+FOREIGN KEY (co_uf, co_regiao)
+REFERENCES dim_uf (co_uf, co_regiao)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_municipio_fato_fk
+FOREIGN KEY (co_municipio, co_uf, co_regiao)
+REFERENCES dim_municipio (co_municipio, co_uf, co_regiao)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_comodalidade_fato_fk
+FOREIGN KEY (co_Modalidade)
+REFERENCES dim_coModalidade (co_Modalidade)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_cogroup_fato_fk
+FOREIGN KEY (co_group)
+REFERENCES dim_coGroup (co_group)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_codorg_fato_fk
+FOREIGN KEY (co_orgacad)
+REFERENCES dim_codOrg (co_orgacad)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
+
+ALTER TABLE fato ADD CONSTRAINT dim_categoria_fato_fk
+FOREIGN KEY (co_categad)
+REFERENCES dim_categoria (co_categad)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION;
